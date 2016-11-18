@@ -42,10 +42,10 @@ plot(XPCA)
 
 
 print('Old Psi stats model===============')
-ko = GPflow.kernels.RBF(Qn, ARD=True, active_dims=np.arange(0, Qn))
+ko = GPflow.kernels.RBF(Qn, ARD=True)
 t = time.time()
-mo = gplvm.BayesianGPLVM(X_mean=X_mean,
-                         X_var=X_var, Y=Y, kern=ko, M=M, Z=Z)
+mo = gplvm.BayesianGPLVM(X_mean=X_mean.copy(),
+                         X_var=X_var.copy(), Y=Y, kern=ko, M=M, Z=Z.copy())
 lo = mo.compute_log_likelihood()
 if(fOptimize):
     mo.optimize(display=True, max_iters=100)
@@ -53,9 +53,9 @@ timeOld = time.time()-t
 plot(mo.X_mean.value)
 print('GPflow model kernexp branch===============')
 t = time.time()
-ke = GPflow.ekernels.RBF(Qn, ARD=True, active_dims=np.arange(0, Qn))
-me = GPflow.gplvm.BayesianGPLVM(X_mean=X_mean,
-                                X_var=X_var, Y=Y, kern=ke, M=M)
+ke = GPflow.ekernels.RBF(Qn, ARD=True)
+me = GPflow.gplvm.BayesianGPLVM(X_mean=X_mean.copy(),
+                                X_var=X_var.copy(), Y=Y, kern=ke, M=M, Z=Z.copy())
 le = me.compute_log_likelihood()
 if(fOptimize):
     me.optimize(display=True, max_iters=100)
